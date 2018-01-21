@@ -2,6 +2,8 @@ version: '3'
 services:
   go-server:
     image: gocd/gocd-server:v17.12.0
+    container_name: go-server
+    hostname: go-server
     volumes:
     - ./volumes/server/godata:/godata
     - ./volumes/server/home:/home/go
@@ -11,9 +13,12 @@ services:
   go-agent01:
     image: gocd/gocd-agent-debian-8:v17.12.0
     container_name: go-agent01
+    hostname: go-agent01
     volumes:
     - ./volumes/agent01/godata:/godata
     - ./volumes/agent01/home:/home/go
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /usr/bin/docker:/usr/bin/docker
     environment:
     - GO_SERVER_URL=https://go-server:8154/go
     depends_on:
@@ -22,9 +27,12 @@ services:
   go-agent02:
     image: gocd/gocd-agent-debian-8:v17.12.0
     container_name: go-agent02
+    hostname: go-agent02
     volumes:
     - ./volumes/agent02/godata:/godata
     - ./volumes/agent02/home:/home/go
+    - /var/run/docker.sock:/var/run/docker.sock
+    - /usr/bin/docker:/usr/bin/docker    
     environment:
     - GO_SERVER_URL=https://go-server:8154/go
     depends_on:
